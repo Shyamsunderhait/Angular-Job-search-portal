@@ -1,0 +1,15 @@
+@import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
+html,
+body {
+  height: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://img.freepik.com/free-photo/full-shot-students-studying-indoors_23-2149647036.jpg?w=900&t=st=1711287652~exp=1711288252~hmac=3fe867353e3f43addf05445d77e8ba66aef00a1a2e3418d1d4f19785670e8f01");
+  background-size: 100%;
+
+  background-repeat: no-repeat;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

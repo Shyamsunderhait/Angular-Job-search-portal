@@ -1,0 +1,188 @@
+<p mat-dialog-title class="title m-2 ml-4">Register</p>
+<mat-dialog-content class="mat-typography">
+  <!-- form Start -->
+  <form
+    class="form"
+    [formGroup]="regForm.registrationForm"
+    (ngSubmit)="registerUser()"
+  >
+    <p class="message">Signup now and get full access to our app.</p>
+    <!-- image -->
+
+    <input
+      type="file"
+      formControlName="profileImage"
+      accept="image/*"
+      (change)="showPreview($event)"
+      (change)="onFileChange($event)"
+    />
+    <!-- Image Preview -->
+    <div
+      class="imagePreview"
+      *ngIf="
+        imageURL &&
+        imageURL !== 'https://www.w3schools.com/howto/img_avatar.png'
+      "
+    >
+      <img
+        [src]="imageURL"
+        [alt]="this.regForm.registrationForm.profileImage"
+      />
+    </div>
+
+    <!-- Image Preview -->
+
+    <div class="flex">
+      <label for="firstname">
+        <input
+          required=""
+          placeholder=""
+          type="text"
+          class="input"
+          formControlName="firstname"
+          maxlength="21"
+        />
+        <span>Firstname</span>
+        <small
+          style="color: red"
+          *ngIf="firstname.invalid && (firstname.dirty || firstname.touched)"
+          class="block p-error"
+        >
+          <div *ngIf="firstname.errors?.['required']">Name is required.</div>
+          <div *ngIf="firstname.errors?.['pattern']">Enter a valid Name</div>
+          <div *ngIf="firstname.errors?.['maxlength']">
+            characters should be less than 20
+          </div>
+        </small>
+      </label>
+
+      <label>
+        <input
+          required=""
+          placeholder=""
+          type="text"
+          class="input"
+          formControlName="lastname"
+        />
+        <span>Lastname</span>
+      </label>
+    </div>
+
+    <label>
+      <input
+        required=""
+        placeholder=""
+        type="email"
+        class="input"
+        formControlName="email"
+      />
+      <span>Email</span>
+    </label>
+    <label>
+      <input
+        required=""
+        placeholder=""
+        type="number"
+        class="input"
+        formControlName="phoneNo"
+      />
+      <span>456-466-4561</span>
+    </label>
+    <!-- State and country input fields -->
+
+    <select formControlName="country">
+      <option value="" disabled selected>Select Country</option>
+      <option value="india">India</option>
+      <option value="london">London</option>
+      <option value="uk">UK</option>
+      <option value="america">America</option>
+    </select>
+
+    <select formControlName="state">
+      <option value="" disabled selected>Select State</option>
+      <option value="maharashtra">Maharashtra</option>
+      <option value="delhi">Delhi</option>
+      <option value="rajasthan">Rajasthan</option>
+      <option value="gujarat">Gujarat</option>
+    </select>
+
+    <!-- Age slider -->
+    <label for="age" class="ageLabel">Age</label>
+    <mat-slider
+      showTickMarks
+      min="0"
+      max="100"
+      step="1"
+      showTickMarks
+      discrete
+      [displayWith]="formatLabel"
+    >
+      <input matSliderThumb formControlName="age" />
+    </mat-slider>
+
+    <!-- t -->
+    <label for="addressType">Address Type:</label>
+    <select formControlName="addressType">
+      <option value="home">Home</option>
+      <option value="company">Company</option>
+    </select>
+
+    <div *ngIf="regForm.registrationForm.get('addressType').value === 'home'">
+      <label for="address1">Address 1:</label>
+      <input type="text" formControlName="address1" />
+      <label for="address2">Address 2:</label>
+      <input type="text" formControlName="address2" />
+    </div>
+
+    <div
+      *ngIf="regForm.registrationForm.get('addressType').value === 'company'"
+    >
+      <label for="companyAddress1">Company Address 1:</label>
+      <input type="text" formControlName="companyAddress1" />
+      <label for="companyAddress2">Company Address 2:</label>
+      <input type="text" formControlName="companyAddress2" />
+    </div>
+    <!--     -->
+    <mat-chip-grid #chipGrid aria-label="Enter fruits">
+      @for (fruit of fruits; track fruit) {
+      <mat-chip-row
+        (removed)="remove(fruit)"
+        [editable]="true"
+        (edited)="edit(fruit, $event)"
+        [aria-description]="'press enter to edit ' + fruit.name"
+      >
+        {{ fruit.name }}
+        <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      }
+      <input
+        class="matInput"
+        formControlName="tags"
+        placeholder="New fruit..."
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-grid>
+
+    <!-- form end -->
+    <!-- toast -->
+
+    <!-- toast -->
+
+    <mat-dialog-actions align="end">
+      <button
+        class="submit mr-5 pl-5 pr-5"
+        type="submit"
+        (click)="userProfilePage()"
+      >
+        Submit
+      </button>
+
+      <button class="submit btn-danger" mat-dialog-close>Close</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

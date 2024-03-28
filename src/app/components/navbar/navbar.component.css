@@ -1,0 +1,10 @@
+.navbar-brand {
+  color: #007bff;
+}
+.navbar-nav .nav-link {
+  color: #007bff;
+}
+#btn {
+  background: none;
+  border: none;
+}

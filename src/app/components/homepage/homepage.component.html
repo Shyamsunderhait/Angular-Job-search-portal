@@ -1,0 +1,73 @@
+<div class="containerHome">
+  <h1 class="text-white mb-5">Im Looking for...</h1>
+
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="jobDescription" class="text-white"
+          >Enter Job Description:</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="jobDescription"
+          placeholder="Job Description"
+        />
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="location" class="text-white">Location:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="location"
+          placeholder="Location"
+        />
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-primary btnS">Search</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="fullTime"
+        />
+        <label class="form-check-label text-white" for="fullTime">
+          Full Time
+        </label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="partTimeCasualFreelance"
+        />
+        <label
+          class="form-check-label text-white"
+          for="partTimeCasualFreelance"
+        >
+          Part Time / Casual / Freelance
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="modelForm">
+    <button type="button" class="btn btn-primary" (click)="openDialog()">
+      Register
+    </button>
+
+    <!-- The Modal Register -->
+  </div>
+</div>
+
+<script></script>

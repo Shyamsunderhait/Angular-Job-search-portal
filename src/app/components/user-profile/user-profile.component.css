@@ -1,0 +1,17 @@
+.profileContainer {
+  background-color: white;
+  display: flex;
+  justify-content: space-around;
+}
+.profileSection {
+  margin-left: 50px;
+  margin-right: 10%;
+  margin-top: 10%;
+}
+.imageContainer {
+  margin-left: 10%;
+}
+
+.profileContainer {
+  padding-bottom: 20%;
+}
