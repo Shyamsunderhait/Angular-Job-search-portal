@@ -16,6 +16,12 @@
       (change)="showPreview($event)"
       (change)="onFileChange($event)"
     />
+     <div
+    style="color: red;"
+      *ngIf="
+        regForm.registrationForm.get('profileImage').errors?.invalidImageSize
+      "
+    >
     <!-- Image Preview -->
     <div
       class="imagePreview"
