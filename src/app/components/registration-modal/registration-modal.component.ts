@@ -116,13 +116,31 @@ export class RegistrationModalComponent {
     }
   }
 
-  convertToBase64(file: File) {
+   convertToBase64(file: File) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.regForm.registrationForm.patchValue({
-        profileImage: reader.result,
-      });
+      if (typeof reader.result === 'string') {
+        this.regForm.registrationForm.patchValue({
+          profileImage: reader.result,
+        });
+        this.validateImageSize(reader.result);
+      }
+    };
+  }
+//------- image validation------//
+
+  validateImageSize(base64String: string) {
+    const img = new Image();
+    img.src = base64String;
+    img.onload = () => {
+      if (img.width === 310 && img.height === 325) {
+        this.regForm.registrationForm.get('profileImage').setErrors(null);
+      } else {
+        this.regForm.registrationForm
+          .get('profileImage')
+          .setErrors({ invalidImageSize: true });
+      }
     };
   }
 
