@@ -88,7 +88,12 @@ export class RegistrationModalComponent {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.regForm.registrationForm.patchValue({
+      profileImage:
+        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgaWQ9ImF2YXRhciI+PHBhdGggZD0iTTI0IDhjLTQuNDIgMC04IDMuNTgtOCA4IDAgNC40MSAzLjU4IDggOCA4czgtMy41OSA4LThjMC00LjQyLTMuNTgtOC04LTh6bTAgMjBjLTUuMzMgMC0xNiAyLjY3LTE2IDh2NGgzMnYtNGMwLTUuMzMtMTAuNjctOC0xNi04eiI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoNDh2NDhIMHoiPjwvcGF0aD48L3N2Zz4=',
+    });
+  }
   // firstName
   get firstname() {
     return this.regForm.registrationForm.controls['firstname'];
