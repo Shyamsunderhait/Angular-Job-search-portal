@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  Inject,
   Renderer2,
   VERSION,
   ViewChild,
@@ -27,7 +28,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-registration-modal',
@@ -59,7 +64,225 @@ export class RegistrationModalComponent {
   @ViewChild('addEmployeeButton') addEmployeeButton: any;
 
   users: any;
-
+  urlink: string = 'assets/avatar.png/';
+  //states based on country
+  countries = [
+    'India',
+    'United States of America',
+    'France',
+    'China',
+    'Brazil',
+    'Germany',
+    'Russia',
+    'Canada',
+    'Australia',
+  ]; // Sample countries data
+  states: { [key: string]: string[] } = {
+    India: [
+      'Andhra Pradesh',
+      'Arunachal Pradesh',
+      'Assam',
+      'Bihar',
+      'Chhattisgarh',
+      'Goa',
+      'Gujarat',
+      'Haryana',
+      'Himachal Pradesh',
+      'Jharkhand',
+      'Karnataka',
+      'Kerala',
+      'Madhya Pradesh',
+      'Maharashtra',
+      'Manipur',
+      'Meghalaya',
+      'Mizoram',
+      'Nagaland',
+      'Odisha',
+      'Punjab',
+      'Rajasthan',
+      'Sikkim',
+      'Tamil Nadu',
+      'Telangana',
+      'Tripura',
+      'Uttar Pradesh',
+      'Uttarakhand',
+      'West Bengal',
+    ],
+    'United States of America': [
+      'Alabama',
+      'Alaska',
+      'Arizona',
+      'Arkansas',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'Delaware',
+      'Florida',
+      'Georgia',
+      'Hawaii',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Iowa',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Maine',
+      'Maryland',
+      'Massachusetts',
+      'Michigan',
+      'Minnesota',
+      'Mississippi',
+      'Missouri',
+      'Montana',
+      'Nebraska',
+      'Nevada',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'New York',
+      'North Carolina',
+      'North Dakota',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Pennsylvania',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Vermont',
+      'Virginia',
+      'Washington',
+      'West Virginia',
+      'Wisconsin',
+      'Wyoming',
+    ],
+    Canada: [
+      'Alberta',
+      'British Columbia',
+      'Manitoba',
+      'New Brunswick',
+      'Newfoundland and Labrador',
+      'Nova Scotia',
+      'Ontario',
+      'Prince Edward Island',
+      'Quebec',
+      'Saskatchewan',
+      'Northwest Territories',
+      'Nunavut',
+      'Yukon',
+    ],
+    Australia: [
+      'New South Wales',
+      'Victoria',
+      'Queensland',
+      'Western Australia',
+      'South Australia',
+      'Tasmania',
+      'Australian Capital Territory',
+      'Northern Territory',
+    ],
+    Brazil: [
+      'Acre',
+      'Alagoas',
+      'Amapá',
+      'Amazonas',
+      'Bahia',
+      'Ceará',
+      'Espírito Santo',
+      'Goiás',
+      'Maranhão',
+      'Mato Grosso',
+      'Mato Grosso do Sul',
+      'Minas Gerais',
+      'Pará',
+      'Paraíba',
+      'Paraná',
+      'Pernambuco',
+      'Piauí',
+      'Rio de Janeiro',
+      'Rio Grande do Norte',
+      'Rio Grande do Sul',
+      'Rondônia',
+      'Roraima',
+      'Santa Catarina',
+      'São Paulo',
+      'Sergipe',
+      'Tocantins',
+    ],
+    China: [
+      'Anhui',
+      'Fujian',
+      'Gansu',
+      'Guangdong',
+      'Guizhou',
+      'Hainan',
+      'Hebei',
+      'Heilongjiang',
+      'Henan',
+      'Hubei',
+      'Hunan',
+      'Jiangsu',
+      'Jiangxi',
+      'Jilin',
+      'Liaoning',
+      'Qinghai',
+      'Shaanxi',
+      'Shandong',
+      'Shanxi',
+      'Sichuan',
+      'Yunnan',
+      'Zhejiang',
+      'Taiwan', // Considered as a part of China
+      'Hong Kong', // Special Administrative Region of China
+      'Macau', // Special Administrative Region of China
+    ],
+    Russia: [
+      'Central Federal District',
+      'Southern Federal District',
+      'Northwestern Federal District',
+      'Far Eastern Federal District',
+      'Siberian Federal District',
+      'Ural Federal District',
+      'Volga Federal District',
+    ],
+    Germany: [
+      'Baden-Württemberg',
+      'Bavaria',
+      'Berlin',
+      'Brandenburg',
+      'Bremen',
+      'Hamburg',
+      'Hesse',
+      'Lower Saxony',
+      'Mecklenburg-Vorpommern',
+      'North Rhine-Westphalia',
+      'Rhineland-Palatinate',
+      'Saarland',
+      'Saxony',
+      'Saxony-Anhalt',
+      'Schleswig-Holstein',
+      'Thuringia',
+    ],
+    France: [
+      'Auvergne-Rhône-Alpes',
+      'Bourgogne-Franche-Comté',
+      'Brittany',
+      'Centre-Val de Loire',
+      'Corsica',
+      'Grand Est',
+      'Hauts-de-France',
+      'Île-de-France',
+      'Normandy',
+      'Nouvelle-Aquitaine',
+      'Occitanie',
+      'Pays de la Loire',
+      "Provence-Alpes-Côte d'Azur",
+    ],
+  };
   // Submitting the form code
 
   constructor(
@@ -68,7 +291,8 @@ export class RegistrationModalComponent {
     private router: Router,
     public regForm: FormService,
     public renderer: Renderer2,
-    public el: ElementRef
+    public el: ElementRef,
+    private dialogRef: MatDialogRef<RegistrationModalComponent>
   ) {
     //changes input fields of address according to type given
     this.regForm.registrationForm
@@ -88,16 +312,29 @@ export class RegistrationModalComponent {
       });
   }
 
+  get country() {
+    return this.regForm.registrationForm.get('country');
+  }
+
+  get state() {
+    return this.regForm.registrationForm.get('state');
+  }
+  onCountryChange() {
+    // Reset state value when country changes
+    this.state?.setValue('');
+  }
+
   ngOnInit(): void {
-    this.regForm.registrationForm.patchValue({
-      profileImage:
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgaWQ9ImF2YXRhciI+PHBhdGggZD0iTTI0IDhjLTQuNDIgMC04IDMuNTgtOCA4IDAgNC40MSAzLjU4IDggOCA4czgtMy41OSA4LThjMC00LjQyLTMuNTgtOC04LTh6bTAgMjBjLTUuMzMgMC0xNiAyLjY3LTE2IDh2NGgzMnYtNGMwLTUuMzMtMTAuNjctOC0xNi04eiI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoNDh2NDhIMHoiPjwvcGF0aD48L3N2Zz4=',
-    });
+    // this.regForm.registrationForm.patchValue({
+    //   profileImage:
+    //     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgaWQ9ImF2YXRhciI+PHBhdGggZD0iTTI0IDhjLTQuNDIgMC04IDMuNTgtOCA4IDAgNC40MSAzLjU4IDggOCA4czgtMy41OSA4LThjMC00LjQyLTMuNTgtOC04LTh6bTAgMjBjLTUuMzMgMC0xNiAyLjY3LTE2IDh2NGgzMnYtNGMwLTUuMzMtMTAuNjctOC0xNi04eiI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGQ9Ik0wIDBoNDh2NDhIMHoiPjwvcGF0aD48L3N2Zz4=',
+    // });
   }
   // firstName
   get firstname() {
     return this.regForm.registrationForm.controls['firstname'];
   }
+
   // Register Method
   registerUser() {
     var type = this.regForm.registrationForm.value.id;
@@ -105,10 +342,10 @@ export class RegistrationModalComponent {
       .AddUpdateUser(this.regForm.registrationForm.value)
       .subscribe((data) => {
         this.regForm.registrationForm.reset();
-
+        this.dialogRef.close();
         // console.log(data);
       });
-
+    console.log(this.regForm.registrationForm.valid);
     // Add dismiss attribute after a delay
   }
 
@@ -121,19 +358,21 @@ export class RegistrationModalComponent {
     }
   }
 
-   convertToBase64(file: File) {
+  convertToBase64(file: File) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       if (typeof reader.result === 'string') {
+        this.validateImageSize(reader.result);
         this.regForm.registrationForm.patchValue({
           profileImage: reader.result,
         });
-        this.validateImageSize(reader.result);
+        // this.validateImageSize(reader.result);
       }
     };
   }
-//------- image validation------//
+
+  //------- image validation------//
 
   validateImageSize(base64String: string) {
     const img = new Image();
@@ -171,11 +410,7 @@ export class RegistrationModalComponent {
   //-------- Tags input --------------//
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  fruits: Fruit[] = [
-    { name: 'Hockey' },
-    { name: 'Football' },
-    { name: 'Cricket' },
-  ];
+  fruits: Fruit[] = [{ name: 'Hockey' }];
 
   announcer = inject(LiveAnnouncer);
 
@@ -250,5 +485,35 @@ export class RegistrationModalComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  currentFile?: File;
+  message = '';
+  preview = '';
+  selectFile(event: any): void {
+    this.message = '';
+    this.preview = '';
+    const selectedFiles = event.target.files;
+
+    if (selectedFiles) {
+      const file: File | null = selectedFiles.item(0);
+
+      if (file) {
+        this.preview = '';
+        this.currentFile = file;
+
+        const reader = new FileReader();
+
+        reader.onload = (e: any) => {
+          console.log(e.target.result);
+          this.preview = e.target.result;
+        };
+
+        reader.readAsDataURL(this.currentFile);
+      }
+    }
+  }
+
+  //disable button if its not valid
+
   //toast
 }

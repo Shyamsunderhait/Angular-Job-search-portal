@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ export class FormService {
   registrationForm: any;
   constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
-      profileImage: [''],
+      profileImage: [null, Validators.required],
       firstname: [
         '',
         [
@@ -17,18 +17,33 @@ export class FormService {
           Validators.maxLength(20),
         ],
       ],
-      lastname: [],
-      email: ['', Validators.required],
-      phoneNo: [''],
-      age: [''],
+      lastname: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/),
+        ],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNo: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(\+\d{1,2}\s?)?((\(\d{3}\))|\d{3})[- .]?\d{3}[- .]?\d{4}$/
+          ),
+        ],
+      ],
+      age: ['', Validators.required],
       addressType: ['home', Validators.required], // Default to 'home' address type
-      address1: ['', Validators.required],
-      address2: ['', Validators.required],
-      companyAddress1: ['', Validators.required],
-      companyAddress2: ['', Validators.required],
+      address1: [''],
+      address2: [''],
+      companyAddress1: [''],
+      companyAddress2: [''],
       country: ['', Validators.required],
       state: ['', Validators.required],
-      tags: [[], [], [], []],
+      tags: [[], Validators.required],
     });
   }
 }

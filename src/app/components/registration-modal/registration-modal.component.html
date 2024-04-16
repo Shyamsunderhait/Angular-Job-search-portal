@@ -15,25 +15,39 @@
       accept="image/*"
       (change)="showPreview($event)"
       (change)="onFileChange($event)"
+      (change)="selectFile($event)"
     />
-     <div
-    style="color: red;"
+    <div
+      style="color: red"
       *ngIf="
         regForm.registrationForm.get('profileImage').errors?.invalidImageSize
       "
     >
-    <!-- Image Preview -->
+      Image must be 310px by 325px.
+    </div>
+
+    <div
+      *ngIf="
+        regForm.registrationForm.get('profileImage')?.invalid &&
+        (regForm.registrationForm.get('profileImage')?.dirty ||
+          regForm.registrationForm.get('profileImage')?.touched)
+      "
+    >
+      <div
+        *ngIf="regForm.registrationForm.get('profileImage')?.errors?.['required']"
+        style="color: red"
+      >
+        Image is required.
+      </div>
+    </div>
+
     <div
       class="imagePreview"
       *ngIf="
-        imageURL &&
-        imageURL !== 'https://www.w3schools.com/howto/img_avatar.png'
+        preview && preview !== 'https://www.w3schools.com/howto/img_avatar.png'
       "
     >
-      <img
-        [src]="imageURL"
-        [alt]="this.regForm.registrationForm.profileImage"
-      />
+      <img [src]="preview" [alt]="" class="preview" />
     </div>
 
     <!-- Image Preview -->
@@ -84,6 +98,26 @@
       />
       <span>Email</span>
     </label>
+    <div
+      *ngIf="
+        regForm.registrationForm.get('email')?.invalid &&
+        (regForm.registrationForm.get('email')?.dirty ||
+          regForm.registrationForm.get('email')?.touched)
+      "
+    >
+      <div
+        *ngIf="regForm.registrationForm.get('email')?.errors?.['required']"
+        style="color: red"
+      >
+        Email is required.
+      </div>
+      <div
+        *ngIf="regForm.registrationForm.get('email')?.errors?.['email']"
+        style="color: red"
+      >
+        Email must contain email format only ex-abcgmail.com.
+      </div>
+    </div>
     <label>
       <input
         required=""
@@ -94,22 +128,54 @@
       />
       <span>456-466-4561</span>
     </label>
+    <div
+      *ngIf="
+        regForm.registrationForm.get('phoneNo')?.invalid &&
+        (regForm.registrationForm.get('phoneNo')?.dirty ||
+          regForm.registrationForm.get('phoneNo')?.touched)
+      "
+    >
+      <div
+        *ngIf="regForm.registrationForm.get('phoneNo')?.errors?.['required']"
+        style="color: red"
+      >
+        phoneNo is required.
+      </div>
+      <div
+        *ngIf="regForm.registrationForm.get('phoneNo')?.errors?.['pattern']"
+        style="color: red"
+      >
+        Invalid Entry
+      </div>
+    </div>
     <!-- State and country input fields -->
 
-    <select formControlName="country">
+    <select formControlName="country" (change)="onCountryChange()">
       <option value="" disabled selected>Select Country</option>
-      <option value="india">India</option>
-      <option value="london">London</option>
-      <option value="uk">UK</option>
-      <option value="america">America</option>
+      <option *ngFor="let country of countries" [value]="country">
+        {{ country }}
+      </option>
     </select>
+    <div
+      *ngIf="
+        regForm.registrationForm.get('country')?.invalid &&
+        (regForm.registrationForm.get('country')?.dirty ||
+          regForm.registrationForm.get('country')?.touched)
+      "
+    >
+      <div
+        *ngIf="regForm.registrationForm.get('country')?.errors?.['required']"
+        style="color: red"
+      >
+        country is required.
+      </div>
+    </div>
 
     <select formControlName="state">
       <option value="" disabled selected>Select State</option>
-      <option value="maharashtra">Maharashtra</option>
-      <option value="delhi">Delhi</option>
-      <option value="rajasthan">Rajasthan</option>
-      <option value="gujarat">Gujarat</option>
+      <option *ngFor="let state of states[country?.value]" [value]="state">
+        {{ state }}
+      </option>
     </select>
 
     <!-- Age slider -->
@@ -145,6 +211,34 @@
     >
       <label for="companyAddress1">Company Address 1:</label>
       <input type="text" formControlName="companyAddress1" />
+      <div
+        *ngIf="
+          regForm.registrationForm.get('address1')?.invalid &&
+          (regForm.registrationForm.get('address1')?.dirty ||
+            regForm.registrationForm.get('address1')?.touched)
+        "
+      >
+        <div
+          *ngIf="regForm.registrationForm.get('address1')?.errors?.['required']"
+          style="color: red"
+        >
+          address1 is required.
+        </div>
+      </div>
+      <div
+        *ngIf="
+          regForm.registrationForm.get('address2')?.invalid &&
+          (regForm.registrationForm.get('address2')?.dirty ||
+            regForm.registrationForm.get('address2')?.touched)
+        "
+      >
+        <div
+          *ngIf="regForm.registrationForm.get('address2')?.errors?.['required']"
+          style="color: red"
+        >
+          address2 is required.
+        </div>
+      </div>
       <label for="companyAddress2">Company Address 2:</label>
       <input type="text" formControlName="companyAddress2" />
     </div>
@@ -184,11 +278,10 @@
         class="submit mr-5 pl-5 pr-5"
         type="submit"
         (click)="userProfilePage()"
+        [disabled]="!this.regForm.registrationForm.valid"
       >
         Submit
       </button>
-
-      <button class="submit btn-danger" mat-dialog-close>Close</button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>

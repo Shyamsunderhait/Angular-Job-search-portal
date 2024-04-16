@@ -50,6 +50,8 @@ export class UserProfileComponent {
         profileImage: data.profileImage,
         tags: data.tags,
         addressType: data.addressType,
+        address1: data.address1,
+        address2: data.address2,
         companyAddress1: data.companyAddress1,
         companyAddress2: data.companyAddress2,
         firstname: data.firstname,

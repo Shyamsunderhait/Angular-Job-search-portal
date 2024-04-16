@@ -15,4 +15,7 @@ export class NavbarComponent {
   userProfilePage() {
     this.router.navigateByUrl('/userProfile');
   }
+  homePage() {
+    this.router.navigateByUrl('/home');
+  }
 }
